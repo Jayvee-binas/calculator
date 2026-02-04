@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 const VAT_RATE = 0.12
 
@@ -55,9 +55,6 @@ function formatPeso(value) {
   return 'P' + Number(value).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
-watch(selectedAccessory, (id) => {
-  if (id === 'custom') customMakingCharge.value = 0
-})
 </script>
 
 <template>
