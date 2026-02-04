@@ -16,7 +16,7 @@ function onLogout() {
 
 <template>
   <div class="layout">
-    <header class="header">
+    <header class="header" role="banner">
       <h1 class="header-title">Gold Calculator</h1>
       <div class="header-right">
         <span class="user-email">{{ user?.email }}</span>

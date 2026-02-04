@@ -28,6 +28,19 @@ const makingChargeAmount = computed(() => {
   return Number(customMakingCharge.value) || 0
 })
 
+const isMakingChargePreset = computed(() => {
+  const id = selectedAccessory.value
+  return id && id !== 'custom'
+})
+
+const makingChargeDisplayValue = computed({
+  get: () => (isMakingChargePreset.value ? makingChargeAmount.value : customMakingCharge.value),
+  set: (val) => {
+    customMakingCharge.value = Number(val) || 0
+    if (selectedAccessory.value !== 'custom') selectedAccessory.value = 'custom'
+  }
+})
+
 const goldValue = computed(() => {
   const w = Number(weight.value) || 0
   const p = Number(pricePerGram.value) || 0
@@ -64,19 +77,20 @@ watch(selectedAccessory, (id) => {
     <div class="field making-charge">
       <label>Making Charge (P)</label>
       <div class="making-charge-row">
-        <select v-model="selectedAccessory" class="select-accessory">
+        <select v-model="selectedAccessory" class="select-accessory" aria-label="Select accessory type">
           <option v-for="a in accessories" :key="a.id" :value="a.id">
             {{ a.label }}
           </option>
         </select>
         <input
-          v-model.number="customMakingCharge"
+          v-model.number="makingChargeDisplayValue"
           type="number"
           step="0.01"
           min="0"
           placeholder="0.00"
           class="making-charge-input"
-          :disabled="![ '', 'custom' ].includes(selectedAccessory)"
+          :disabled="isMakingChargePreset"
+          aria-label="Making charge amount in pesos"
         />
       </div>
     </div>
@@ -154,21 +168,24 @@ watch(selectedAccessory, (id) => {
   align-items: stretch;
 }
 .select-accessory {
+  min-width: 140px;
+  width: auto;
   flex: 1;
-  min-width: 0;
+  max-width: 200px;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 1rem center;
-  padding-right: 2.25rem;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+  cursor: pointer;
 }
 .making-charge-input {
-  width: 100px;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 100px;
 }
 .making-charge-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  opacity: 0.85;
+  cursor: default;
 }
 .summary {
   margin-top: 1.5rem;
