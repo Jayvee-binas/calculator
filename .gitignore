@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dist-ssr
+
+# Logs and debug
+*.log
+npm-debug.log*
+.DS_Store
+*.local
+
+# Editor
+.idea
+*.suo
+*.sw?
